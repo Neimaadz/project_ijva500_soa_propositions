@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_proprositions;
+package com.cedalanavi.projet_IJVA500_SOA_propositions;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
