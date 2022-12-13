@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cedalanavi</groupId>
-	<artifactId>projet_IJVA500_SOA_propositions</artifactId>
+	<artifactId>project_ijva500_soa_propositions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>projet_IJVA500_SOA_propositions</name>
-	<description>projet IJVA500 SOA propositions</description>
+	<name>project_ijva500_soa_propositions</name>
+	<description>project ijva500 soa propositions</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
