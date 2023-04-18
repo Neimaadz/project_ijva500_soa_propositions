@@ -1,6 +1,6 @@
 package com.cedalanavi.project_ijva500_soa_propositions.Entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,9 +16,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.lang.NonNull;
 
-import com.cedalanavi.project_ijva500_soa_propositions.Utils.Status;
+import com.cedalanavi.project_ijva500_soa_propositions.Utils.PropositionStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "proposition")
@@ -27,6 +30,9 @@ public class Proposition {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NonNull
+    private Long idUser;
     
     @NonNull
     private String name;
@@ -36,33 +42,34 @@ public class Proposition {
 
     @NonNull
     @ManyToOne
-    private Type type;
+    @JoinColumn(name = "idPropositionType")
+    @JsonManagedReference
+    private PropositionType propositionType;
 
     @NonNull
-    private Date submitDate;
+    @CreationTimestamp
+    private LocalDateTime submitDate;
 
     private Long delay;
 
-    private Long delayEvaluate;
+    private Long evaluateDelay;
     
     // Proposition state or advancement statut
     @Enumerated(EnumType.STRING)
-    @Column(name="status")
-    private Enum<Status> status;
+    @Column(name="propositionStatus")
+    private PropositionStatus status;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "amendmentId")
+    @OneToMany(mappedBy = "parentProposition", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Proposition> amendments;
     
-    private Long nbVoteSupported;
-    
-    private Long nbVoteAccepted;
-    
-    private Long nbVoteRejected;
+    @ManyToOne
+    @JoinColumn(name = "idParentProposition")
+    @JsonBackReference
+    private Proposition parentProposition;
 
-    private Long nbVoteAbstention;
-    
-    private Long userId;
+    @OneToMany(mappedBy = "proposition", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PropositionVote> propositionVotes;
 
 	public Long getId() {
 		return id;
@@ -70,6 +77,14 @@ public class Proposition {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
 	}
 
 	public String getName() {
@@ -88,19 +103,19 @@ public class Proposition {
 		this.description = description;
 	}
 
-	public Type getType() {
-		return type;
+	public PropositionType getPropositionType() {
+		return propositionType;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setPropositionType(PropositionType propositionType) {
+		this.propositionType = propositionType;
 	}
 
-	public Date getSubmitDate() {
+	public LocalDateTime getSubmitDate() {
 		return submitDate;
 	}
 
-	public void setSubmitDate(Date submitDate) {
+	public void setSubmitDate(LocalDateTime submitDate) {
 		this.submitDate = submitDate;
 	}
 
@@ -112,19 +127,19 @@ public class Proposition {
 		this.delay = delay;
 	}
 
-	public Long getDelayEvaluate() {
-		return delayEvaluate;
+	public Long getEvaluateDelay() {
+		return evaluateDelay;
 	}
 
-	public void setDelayEvaluate(Long delayEvaluate) {
-		this.delayEvaluate = delayEvaluate;
+	public void setEvaluateDelay(Long evaluateDelay) {
+		this.evaluateDelay = evaluateDelay;
 	}
 
-	public Enum<Status> getStatus() {
+	public PropositionStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Enum<Status> status) {
+	public void setStatus(PropositionStatus status) {
 		this.status = status;
 	}
 
@@ -136,44 +151,20 @@ public class Proposition {
 		this.amendments = amendments;
 	}
 
-	public Long getNbVoteSupported() {
-		return nbVoteSupported;
+	public Proposition getParentProposition() {
+		return parentProposition;
 	}
 
-	public void setNbVoteSupported(Long nbVoteSupported) {
-		this.nbVoteSupported = nbVoteSupported;
+	public void setParentProposition(Proposition parentProposition) {
+		this.parentProposition = parentProposition;
 	}
 
-	public Long getNbVoteAccepted() {
-		return nbVoteAccepted;
+	public List<PropositionVote> getPropositionVotes() {
+		return propositionVotes;
 	}
 
-	public void setNbVoteAccepted(Long nbVoteAccepted) {
-		this.nbVoteAccepted = nbVoteAccepted;
-	}
-
-	public Long getNbVoteRejected() {
-		return nbVoteRejected;
-	}
-
-	public void setNbVoteRejected(Long nbVoteRejected) {
-		this.nbVoteRejected = nbVoteRejected;
-	}
-
-	public Long getNbVoteAbstention() {
-		return nbVoteAbstention;
-	}
-
-	public void setNbVoteAbstention(Long nbVoteAbstention) {
-		this.nbVoteAbstention = nbVoteAbstention;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setPropositionVotes(List<PropositionVote> propositionVotes) {
+		this.propositionVotes = propositionVotes;
 	}
     
 }
