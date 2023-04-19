@@ -4,6 +4,8 @@ public class PropositionCreateRequest {
 
 	public Long idUser;
 
+	public Long idProject;
+	
 	public Long idProposition;
 	
 	public String name;

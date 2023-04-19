@@ -32,12 +32,13 @@ public class PropositionController {
 	@GetMapping(value = "/search")
 	public List<PropositionResource> searchPropositions(
 			@RequestParam(required = false) Long id,
+			@RequestParam(required = false) Long idProject,
 			@RequestParam(required = false) Long idUser,
 			@RequestParam(required = false) String type) {
-		List<Proposition> userPropositions = propositionService.search(id, idUser, type);
+		List<Proposition> propositions = propositionService.searchPropositions(id, idProject, idUser, type);
 		List<PropositionResource> propositionResources = new ArrayList<PropositionResource>();
-		userPropositions.forEach(userProposition -> {
-			propositionResources.add(propositionMapper.toPropositionResource(userProposition));
+		propositions.forEach(proposition -> {
+			propositionResources.add(propositionMapper.toPropositionResource(proposition));
 		});
 		return propositionResources;
 	}

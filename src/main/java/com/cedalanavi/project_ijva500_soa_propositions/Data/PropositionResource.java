@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class PropositionResource {
 	
 	public Long id;
+	
+	public Long idProject;
 
 	@JsonInclude(value  = Include.NON_EMPTY)
 	public Long idParentProposition;

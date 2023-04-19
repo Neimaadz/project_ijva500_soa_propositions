@@ -32,6 +32,9 @@ public class Proposition {
     private Long id;
 
     @NonNull
+    private Long idProject;
+
+    @NonNull
     private Long idUser;
     
     @NonNull

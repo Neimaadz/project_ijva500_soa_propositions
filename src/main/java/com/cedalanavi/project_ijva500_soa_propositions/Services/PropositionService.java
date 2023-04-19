@@ -32,14 +32,8 @@ public class PropositionService {
 		this.propositionTypeRepository = propositionTypeRepository;
 	}
 
-	public List<Proposition> search(Long id, Long idUser, String type) {
-//		PropositionType propositionType = propositionTypeRepository.findByName(type).get();
-//		if (id != null) {
-//			return Arrays.asList(propositionRepository.findByIdAndPropositionType(Long.decode(id), propositionType).get());
-//		} else {
-//			return propositionRepository.findAllByIdUserAndPropositionType(Long.decode(idUser), propositionType);
-//		}
-		return propositionRepository.findAllByCustomParams(id, idUser, type);
+	public List<Proposition> searchPropositions(Long id, Long idProject, Long idUser, String type) {
+		return propositionRepository.findAllByCustomParams(id, idProject, idUser, type);
 	}
 	
 	public Proposition createProposition(PropositionCreateRequest propositionCreateRequest) {
