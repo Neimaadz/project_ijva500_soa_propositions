@@ -17,7 +17,7 @@ public class PropositionResource {
 	@JsonInclude(value  = Include.NON_EMPTY)
 	public Long idParentProposition;
 
-	public Long idUser;
+	public String idUser;
     
 	public String name;
     
@@ -33,10 +33,8 @@ public class PropositionResource {
     
 	public PropositionStatus status;
 
-	@JsonInclude(value  = Include.NON_EMPTY)
 	public List<PropositionResource> amendments;
 
-	@JsonInclude(value  = Include.NON_EMPTY)
 	public List<PropositionVote> propositionVotes;
 	
 }

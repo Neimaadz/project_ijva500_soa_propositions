@@ -18,6 +18,6 @@ public interface PropositionRepository extends JpaRepository<Proposition, Long> 
 	List<Proposition> findAllByCustomParams(
 			@Param("id") Long id,
 			@Param("idProject") Long idProject,
-			@Param("idUser") Long idUser,
+			@Param("idUser") String idUser,
 			@Param("typeName") String type);
 }

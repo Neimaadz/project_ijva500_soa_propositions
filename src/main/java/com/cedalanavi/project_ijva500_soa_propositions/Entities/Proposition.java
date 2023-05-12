@@ -35,7 +35,7 @@ public class Proposition {
     private Long idProject;
 
     @NonNull
-    private Long idUser;
+    private String idUser;
     
     @NonNull
     private String name;
@@ -72,6 +72,7 @@ public class Proposition {
     private Proposition parentProposition;
 
     @OneToMany(mappedBy = "proposition", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PropositionVote> propositionVotes;
 
 	public Long getId() {
@@ -82,12 +83,20 @@ public class Proposition {
 		this.id = id;
 	}
 
-	public Long getIdUser() {
+	public String getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(Long idUser) {
+	public void setIdUser(String idUser) {
 		this.idUser = idUser;
+	}
+
+	public Long getIdProject() {
+		return idProject;
+	}
+
+	public void setIdProject(Long idProject) {
+		this.idProject = idProject;
 	}
 
 	public String getName() {

@@ -1,6 +1,9 @@
 package com.cedalanavi.project_ijva500_soa_propositions.Entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
+
+import com.cedalanavi.project_ijva500_soa_propositions.Utils.VoteType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "propositionVote")
@@ -19,19 +25,16 @@ public class PropositionVote {
     private Long id;
 
     @NonNull
-    private Long idUser;
+    private String idUser;
     
     @ManyToOne
     @JoinColumn(name="idProposition")
+    @JsonBackReference
     private Proposition proposition;
-    
-    private Boolean supported;
-    
-    private Boolean accepted;
-    
-    private Boolean rejected;
 
-    private Boolean abstention;
+    @Enumerated(EnumType.STRING)
+    @Column(name="voteType")
+    private VoteType voteType;
 
 	public Long getId() {
 		return id;
@@ -41,11 +44,11 @@ public class PropositionVote {
 		this.id = id;
 	}
 
-	public Long getIdUser() {
+	public String getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(Long idUser) {
+	public void setIdUser(String idUser) {
 		this.idUser = idUser;
 	}
 
@@ -57,36 +60,12 @@ public class PropositionVote {
 		this.proposition = proposition;
 	}
 
-	public Boolean getSupported() {
-		return supported;
+	public VoteType getVoteType() {
+		return voteType;
 	}
 
-	public void setSupported(Boolean supported) {
-		this.supported = supported;
+	public void setVoteType(VoteType voteType) {
+		this.voteType = voteType;
 	}
-
-	public Boolean getAccepted() {
-		return accepted;
-	}
-
-	public void setAccepted(Boolean accepted) {
-		this.accepted = accepted;
-	}
-
-	public Boolean getRejected() {
-		return rejected;
-	}
-
-	public void setRejected(Boolean rejected) {
-		this.rejected = rejected;
-	}
-
-	public Boolean getAbstention() {
-		return abstention;
-	}
-
-	public void setAbstention(Boolean abstention) {
-		this.abstention = abstention;
-	}
-    
+	
 }
