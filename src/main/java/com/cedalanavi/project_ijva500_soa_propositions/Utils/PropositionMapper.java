@@ -9,6 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionResource;
+import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.Proposition;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
@@ -38,5 +39,5 @@ public interface PropositionMapper {
 	@Mapping(target = "propositionVotes", ignore = true)
 	@Mapping(target = "parentProposition", ignore = true)
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updatePropositionFromDto(PropositionCreateRequest req, @MappingTarget Proposition proposition);
+    void updatePropositionFromDto(PropositionUpdateRequest updateRequest, @MappingTarget Proposition proposition);
 }

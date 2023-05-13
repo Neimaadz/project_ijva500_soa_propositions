@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionCreateRequest;
+import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.VoteCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.Proposition;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.PropositionType;
@@ -60,9 +61,9 @@ public class PropositionService {
 		return propositionRepository.save(proposition);
 	}
 	
-	public Proposition update(PropositionCreateRequest request) {
-		Proposition proposition = propositionRepository.getReferenceById(request.idProposition);
-		propositionMapper.updatePropositionFromDto(request, proposition);
+	public Proposition update(Long id, PropositionUpdateRequest updateRequest) {
+		Proposition proposition = propositionRepository.getReferenceById(id);
+		propositionMapper.updatePropositionFromDto(updateRequest, proposition);
 		
 		return propositionRepository.save(proposition);
 	}
