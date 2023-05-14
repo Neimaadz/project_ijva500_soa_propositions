@@ -32,8 +32,9 @@ public interface PropositionMapper {
 	public PropositionResource toPropositionResource(Proposition proposition);
 
 	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "idUser", ignore = true)
+	@Mapping(target = "idProject", ignore = true)
 	@Mapping(target = "propositionType", ignore = true)
-	@Mapping(target = "status", ignore = true)
 	@Mapping(target = "submitDate", ignore = true)
 	@Mapping(target = "amendments", ignore = true)
 	@Mapping(target = "propositionVotes", ignore = true)

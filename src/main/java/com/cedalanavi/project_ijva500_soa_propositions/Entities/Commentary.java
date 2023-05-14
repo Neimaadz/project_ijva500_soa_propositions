@@ -1,9 +1,6 @@
 package com.cedalanavi.project_ijva500_soa_propositions.Entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,14 +10,13 @@ import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
 
-import com.cedalanavi.project_ijva500_soa_propositions.Utils.VoteTypes;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "propositionVote")
-public class PropositionVote {
-
-    @Id
+@Table(name = "commentary")
+public class Commentary {
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -32,9 +28,7 @@ public class PropositionVote {
     @JsonBackReference
     private Proposition proposition;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="voteType")
-    private VoteTypes voteType;
+    private String message;
 
 	public Long getId() {
 		return id;
@@ -60,12 +54,12 @@ public class PropositionVote {
 		this.proposition = proposition;
 	}
 
-	public VoteTypes getVoteType() {
-		return voteType;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setVoteType(VoteTypes voteType) {
-		this.voteType = voteType;
+	public void setMessage(String message) {
+		this.message = message;
 	}
-	
+    
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cedalanavi.project_ijva500_soa_propositions.Data.CommentaryCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionResource;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionUpdateRequest;
@@ -74,6 +75,12 @@ public class PropositionController {
 	@PostMapping("/vote/{id}")
 	public PropositionResource vote(@PathVariable Long id, @RequestBody VoteCreateRequest voteCreateRequest) throws Exception {
 		Proposition propositionVoted = propositionService.vote(id, voteCreateRequest);
+		return propositionMapper.toPropositionResource(propositionVoted);
+	}
+	
+	@PostMapping("/commentary/add/{id}")
+	public PropositionResource addCommentary(@PathVariable Long id, @RequestBody CommentaryCreateRequest commentaryCreateRequest) throws Exception {
+		Proposition propositionVoted = propositionService.addCommentary(id, commentaryCreateRequest);
 		return propositionMapper.toPropositionResource(propositionVoted);
 	}
 }

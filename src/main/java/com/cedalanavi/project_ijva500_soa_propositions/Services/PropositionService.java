@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cedalanavi.project_ijva500_soa_propositions.Data.CommentaryCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.PropositionUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_propositions.Data.VoteCreateRequest;
+import com.cedalanavi.project_ijva500_soa_propositions.Entities.Commentary;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.Proposition;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.PropositionType;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.PropositionVote;
@@ -14,7 +16,8 @@ import com.cedalanavi.project_ijva500_soa_propositions.Repositories.PropositionR
 import com.cedalanavi.project_ijva500_soa_propositions.Repositories.PropositionTypeRepository;
 import com.cedalanavi.project_ijva500_soa_propositions.Utils.PropositionMapper;
 import com.cedalanavi.project_ijva500_soa_propositions.Utils.PropositionStatus;
-import com.cedalanavi.project_ijva500_soa_propositions.Utils.VoteType;
+import com.cedalanavi.project_ijva500_soa_propositions.Utils.PropositionTypes;
+import com.cedalanavi.project_ijva500_soa_propositions.Utils.VoteTypes;
 
 @Service
 public class PropositionService {
@@ -24,11 +27,6 @@ public class PropositionService {
 	PropositionTypeRepository propositionTypeRepository;
 	
 	PropositionMapper propositionMapper;
-	
-	enum PROPOSITION_TYPE {
-        PROPOSITION,
-        AMENDMENT
-    }
 
 	public PropositionService(PropositionRepository propositionRepository, PropositionMapper propositionMapper, PropositionTypeRepository propositionTypeRepository) {
 		this.propositionRepository = propositionRepository;
@@ -47,7 +45,7 @@ public class PropositionService {
 	public Proposition createProposition(PropositionCreateRequest propositionCreateRequest) {
 		Proposition proposition = propositionMapper.toProposition(propositionCreateRequest);
 		proposition.setStatus(PropositionStatus.EVALUATION);
-		PropositionType propositionType = propositionTypeRepository.findByName(PROPOSITION_TYPE.PROPOSITION.toString()).get();
+		PropositionType propositionType = propositionTypeRepository.findByName(PropositionTypes.PROPOSITION.toString()).get();
 		proposition.setPropositionType(propositionType);
 		
 		return propositionRepository.save(proposition);
@@ -57,7 +55,7 @@ public class PropositionService {
 		Proposition proposition = propositionRepository.getReferenceById(amendmentCreateRequest.idProposition);
 		Proposition amendment = propositionMapper.toProposition(amendmentCreateRequest);
 		amendment.setStatus(PropositionStatus.EVALUATION);
-		PropositionType propositionType = propositionTypeRepository.findByName(PROPOSITION_TYPE.AMENDMENT.toString()).get();
+		PropositionType propositionType = propositionTypeRepository.findByName(PropositionTypes.AMENDMENT.toString()).get();
 		amendment.setPropositionType(propositionType);
 		amendment.setParentProposition(proposition);
 		proposition.getAmendments().add(amendment);
@@ -74,16 +72,41 @@ public class PropositionService {
 	
 	public Proposition vote(Long id, VoteCreateRequest voteCreateRequest) throws Exception {
 		Proposition proposition = propositionRepository.getReferenceById(id);
-		VoteType voteType = VoteType.valueOf(voteCreateRequest.voteType);
-		if (proposition.getStatus() == PropositionStatus.EVALUATION && voteType != VoteType.SUPPORTED
-				|| proposition.getStatus() != PropositionStatus.EVALUATION && voteType == VoteType.SUPPORTED) {
+		VoteTypes voteType = VoteTypes.valueOf(voteCreateRequest.voteType);
+		
+		if (proposition.getStatus() == PropositionStatus.EVALUATION && voteType != VoteTypes.SUPPORTED
+				|| proposition.getStatus() != PropositionStatus.EVALUATION && voteType == VoteTypes.SUPPORTED) {
 			throw new Exception("Error : conditional constraint between proposition status and vote type");
 		}
+		PropositionVote alreadyVoted = new PropositionVote();
+		
+		if (proposition.getStatus() == PropositionStatus.EVALUATION) {
+			alreadyVoted = proposition.getPropositionVotes().stream().filter(t -> t.getIdUser().equals(voteCreateRequest.idUser) && t.getVoteType().equals(VoteTypes.SUPPORTED)).findFirst().orElse(null);
+		} else {
+			alreadyVoted = proposition.getPropositionVotes().stream().filter(t -> t.getIdUser().equals(voteCreateRequest.idUser) && !t.getVoteType().equals(VoteTypes.SUPPORTED)).findFirst().orElse(null);
+		}
+		
+		if (alreadyVoted != null) {
+			throw new Exception("Error : already voted");
+		}
+		
 		PropositionVote propositionVote = new PropositionVote();
 		propositionVote.setIdUser(voteCreateRequest.idUser);
 		propositionVote.setProposition(proposition);
 		propositionVote.setVoteType(voteType);
 		proposition.getPropositionVotes().add(propositionVote);
+		
+		return propositionRepository.save(proposition);
+	}
+	
+	public Proposition addCommentary(Long id, CommentaryCreateRequest commentaryCreateRequest) {
+		Proposition proposition = propositionRepository.getReferenceById(id);
+		
+		Commentary commentary = new Commentary();
+		commentary.setIdUser(commentaryCreateRequest.idUser);
+		commentary.setMessage(commentaryCreateRequest.message);
+		commentary.setProposition(proposition);
+		proposition.getCommentaries().add(commentary);
 		
 		return propositionRepository.save(proposition);
 	}

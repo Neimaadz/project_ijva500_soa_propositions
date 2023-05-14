@@ -3,6 +3,7 @@ package com.cedalanavi.project_ijva500_soa_propositions.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.cedalanavi.project_ijva500_soa_propositions.Entities.Commentary;
 import com.cedalanavi.project_ijva500_soa_propositions.Entities.PropositionVote;
 import com.cedalanavi.project_ijva500_soa_propositions.Utils.PropositionStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +15,7 @@ public class PropositionResource {
 	
 	public Long idProject;
 
-	@JsonInclude(value  = Include.NON_EMPTY)
+	@JsonInclude(value = Include.NON_EMPTY)
 	public Long idParentProposition;
 
 	public String idUser;
@@ -36,5 +37,6 @@ public class PropositionResource {
 	public List<PropositionResource> amendments;
 
 	public List<PropositionVote> propositionVotes;
-	
+
+	public List<Commentary> commentaries;
 }

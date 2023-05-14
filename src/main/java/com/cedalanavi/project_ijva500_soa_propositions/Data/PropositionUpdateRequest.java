@@ -6,6 +6,8 @@ public class PropositionUpdateRequest {
 	
 	public String description;
 
+	public String status;
+
 	public Long delay;
 
 	public Long evaluateDelay;

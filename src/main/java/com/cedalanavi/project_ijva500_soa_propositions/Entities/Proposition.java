@@ -57,7 +57,7 @@ public class Proposition {
 
     private Long evaluateDelay;
     
-    // Proposition state or advancement statut
+    // Proposition state or advancement status
     @Enumerated(EnumType.STRING)
     @Column(name="propositionStatus")
     private PropositionStatus status;
@@ -74,6 +74,10 @@ public class Proposition {
     @OneToMany(mappedBy = "proposition", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<PropositionVote> propositionVotes;
+    
+    @OneToMany(mappedBy = "proposition", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Commentary> commentaries;
 
 	public Long getId() {
 		return id;
@@ -177,6 +181,14 @@ public class Proposition {
 
 	public void setPropositionVotes(List<PropositionVote> propositionVotes) {
 		this.propositionVotes = propositionVotes;
+	}
+
+	public List<Commentary> getCommentaries() {
+		return commentaries;
+	}
+
+	public void setCommentaries(List<Commentary> commentaries) {
+		this.commentaries = commentaries;
 	}
     
 }
