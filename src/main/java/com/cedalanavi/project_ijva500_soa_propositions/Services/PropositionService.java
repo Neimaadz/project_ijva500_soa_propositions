@@ -35,6 +35,10 @@ public class PropositionService {
 		this.propositionMapper = propositionMapper;
 		this.propositionTypeRepository = propositionTypeRepository;
 	}
+	
+	public Proposition findById(Long id) {
+		return propositionRepository.getReferenceById(id);
+	}
 
 	public List<Proposition> searchPropositions(Long id, Long idProject, String idUser, String type) {
 		return propositionRepository.findAllByCustomParams(id, idProject, idUser, type);
@@ -68,12 +72,12 @@ public class PropositionService {
 		return propositionRepository.save(proposition);
 	}
 	
-	public Proposition vote(VoteCreateRequest voteCreateRequest) throws Exception {
-		Proposition proposition = propositionRepository.getReferenceById(voteCreateRequest.idProposition);
+	public Proposition vote(Long id, VoteCreateRequest voteCreateRequest) throws Exception {
+		Proposition proposition = propositionRepository.getReferenceById(id);
 		VoteType voteType = VoteType.valueOf(voteCreateRequest.voteType);
 		if (proposition.getStatus() == PropositionStatus.EVALUATION && voteType != VoteType.SUPPORTED
 				|| proposition.getStatus() != PropositionStatus.EVALUATION && voteType == VoteType.SUPPORTED) {
-			throw new Exception("Error proposition status and vote type");
+			throw new Exception("Error : conditional constraint between proposition status and vote type");
 		}
 		PropositionVote propositionVote = new PropositionVote();
 		propositionVote.setIdUser(voteCreateRequest.idUser);

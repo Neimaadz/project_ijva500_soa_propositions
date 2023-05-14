@@ -32,6 +32,12 @@ public class PropositionController {
 		this.propositionService = propositionService;
 		this.propositionMapper = propositionMapper;
 	}
+	
+	@GetMapping("/{id}")
+	public PropositionResource findById(@PathVariable Long id) {
+		Proposition proposition = propositionService.findById(id);
+		return propositionMapper.toPropositionResource(proposition);
+	}
 
 	@GetMapping("/search")
 	public List<PropositionResource> searchPropositions(
@@ -60,14 +66,14 @@ public class PropositionController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public PropositionResource updateProposition(@PathVariable Long id, @RequestBody PropositionUpdateRequest updareRequest) {
-		Proposition propositionUpdated = propositionService.update(id, updareRequest);
+	public PropositionResource updateProposition(@PathVariable Long id, @RequestBody PropositionUpdateRequest updateRequest) {
+		Proposition propositionUpdated = propositionService.update(id, updateRequest);
 		return propositionMapper.toPropositionResource(propositionUpdated);
 	}
 
-	@PostMapping("/vote")
-	public PropositionResource vote(@RequestBody VoteCreateRequest voteCreateRequest) throws Exception {
-		Proposition propositionVoted = propositionService.vote(voteCreateRequest);
+	@PostMapping("/vote/{id}")
+	public PropositionResource vote(@PathVariable Long id, @RequestBody VoteCreateRequest voteCreateRequest) throws Exception {
+		Proposition propositionVoted = propositionService.vote(id, voteCreateRequest);
 		return propositionMapper.toPropositionResource(propositionVoted);
 	}
 }
