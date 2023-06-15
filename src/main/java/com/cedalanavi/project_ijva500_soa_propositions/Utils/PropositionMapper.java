@@ -22,6 +22,7 @@ public interface PropositionMapper {
 	@Mapping(target = "amendments", ignore = true)
 	@Mapping(target = "propositionVotes", ignore = true)
 	@Mapping(target = "parentProposition", ignore = true)
+	@Mapping(target = "commentaries", ignore = true)
 	public Proposition toProposition(PropositionCreateRequest propositionCreateRequest);
 
 	@Mapping(target = "submitDate", ignore = true)
@@ -39,6 +40,7 @@ public interface PropositionMapper {
 	@Mapping(target = "amendments", ignore = true)
 	@Mapping(target = "propositionVotes", ignore = true)
 	@Mapping(target = "parentProposition", ignore = true)
+	@Mapping(target = "commentaries", ignore = true)
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updatePropositionFromDto(PropositionUpdateRequest updateRequest, @MappingTarget Proposition proposition);
 }
