@@ -66,29 +66,12 @@ public class PropositionService {
 	public Proposition update(Long id, PropositionUpdateRequest updateRequest) {
 		Proposition proposition = propositionRepository.getReferenceById(id);
 		propositionMapper.updatePropositionFromDto(updateRequest, proposition);
-		
 		return propositionRepository.save(proposition);
 	}
 	
 	public Proposition vote(Long id, VoteCreateRequest voteCreateRequest) throws Exception {
 		Proposition proposition = propositionRepository.getReferenceById(id);
 		VoteTypes voteType = VoteTypes.valueOf(voteCreateRequest.voteType);
-		
-		if (proposition.getStatus() == PropositionStatus.EVALUATION && voteType != VoteTypes.SUPPORTED
-				|| proposition.getStatus() != PropositionStatus.EVALUATION && voteType == VoteTypes.SUPPORTED) {
-			throw new Exception("Error : conditional constraint between proposition status and vote type");
-		}
-		PropositionVote alreadyVoted = new PropositionVote();
-		
-		if (proposition.getStatus() == PropositionStatus.EVALUATION) {
-			alreadyVoted = proposition.getPropositionVotes().stream().filter(t -> t.getIdUser().equals(voteCreateRequest.idUser) && t.getVoteType().equals(VoteTypes.SUPPORTED)).findFirst().orElse(null);
-		} else {
-			alreadyVoted = proposition.getPropositionVotes().stream().filter(t -> t.getIdUser().equals(voteCreateRequest.idUser) && !t.getVoteType().equals(VoteTypes.SUPPORTED)).findFirst().orElse(null);
-		}
-		
-		if (alreadyVoted != null) {
-			throw new Exception("Error : already voted");
-		}
 		
 		PropositionVote propositionVote = new PropositionVote();
 		propositionVote.setIdUser(voteCreateRequest.idUser);
